@@ -13,10 +13,8 @@ import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
-import com.sky.interceptor.JwtTokenAdminInterceptor;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -103,5 +100,38 @@ public class EmployeeServiceImpl implements EmployeeService {
        Page<Employee> employeePage=employeeMapper.page(employeePageQueryDTO);
         return new PageResult(employeePage.getTotal(),employeePage.getResult());
     }
+
+    @Override
+    public void updateStatus(Integer status, Long id) {
+
+       Employee employee=Employee.builder()
+               .id(id)
+               .status(status)
+               .updateTime(LocalDateTime.now())
+               .updateUser(BaseContext.getCurrentId())
+               .build();
+       employeeMapper.updateStatus(employee);
+
+        log.info("修改成功");
+    }
+
+    @Override
+    public void updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee=new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        log.info("修改信息："+employee);
+        employeeMapper.updateStatus(employee);
+    }
+
+    @Override
+    public Employee selectEmployeeById(Long id) {
+
+       Employee employee=employeeMapper.selectEmployeeById(id);
+
+       return  employee;
+    }
+
 
 }

@@ -5,7 +5,6 @@ import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 
 public interface EmployeeService {
 
@@ -19,4 +18,13 @@ public interface EmployeeService {
     void save(EmployeeDTO employeeDTO);
 
     PageResult page(EmployeePageQueryDTO employeePageQueryDTO);
+
+
+    void updateStatus(Integer status, Long id);
+
+    void updateEmployee(EmployeeDTO employeeDTO);
+
+
+
+    Employee selectEmployeeById(Long id);
 }
